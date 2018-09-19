@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #output {
+            margin-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <app-sgnewsletter title="Newsletter!"></app-sgnewsletter>
+    <div id="output">
+        <p>Output:</p>
+    </div>
+
+    <script src="./sgnewsmlettre/ng-newslettre-element.js"></script>
+
+    <script>
+        const subscriber = document.querySelector('app-sgnewsletter');
+        subscriber.addEventListener('subscribe', (event) => {
+            var content = document.createTextNode(event.detail);
+            var output = document.getElementById("output");
+            var br = document.createElement("br");
+            output.appendChild(content);
+            output.appendChild(br);
+        });
+        setTimeout(() => subscriber.title = 'Widget By SDA', 3000);
+    </script>
+</body>
+</html>
