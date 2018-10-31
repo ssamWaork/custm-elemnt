@@ -11,3 +11,29 @@ trim_trailing_whitespace = true
 [*.md]
 max_line_length = off
 trim_trailing_whitespace = false
+stage("Release"){
+         
+    timeout(time: 6, unit: 'HOURS') {
+
+		def userInput = input(
+		id: 'userInput', message: 'Do you want to release this build ?', ok: 'Release', parameters: [
+			[$class: 'TextParameterDefinition', defaultValue: project.version.replace('-SNAPSHOT', ''), description: 'Version', name: 'releaseVersion']
+		])
+
+		waitUntil {
+        	try {
+        		build job: "<release_job>", parameters: [
+        			[$class: 'StringParameterValue', name: 'releaseversion', value: userInput],
+        			[$class: 'StringParameterValue', name: 'BRANCH_TO_RELEASE', value: gitBranch]
+        			]
+			currentBuild.displayName += " REL v${userInput}"
+        		return true
+        	} 
+        	catch(error) {
+        		print error
+        		input "Retry the job ?"
+        		return false
+        	}
+        }
+    }
+}
